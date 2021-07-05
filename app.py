@@ -17,7 +17,7 @@ ma = Marshmallow(app)
 # Product Class/Model
 class Product(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(100), unique=True)
+  name = db.Column(db.String(100))
   description = db.Column(db.String(200))
   price = db.Column(db.Float)
   quantity = db.Column(db.Integer)
@@ -37,7 +37,6 @@ class ProductSchema(ma.Schema):
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
-
 # Each query is called an endpoint
 # Creating a Product
 @app.route('/product', methods=['POST'])
@@ -53,7 +52,7 @@ def add_product():
   return product_schema.jsonify(new_product)
 
 # Get All the Products
-@app.route('/product', methods=['GET'])
+@app.route('/all_products', methods=['GET'])
 def get_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)

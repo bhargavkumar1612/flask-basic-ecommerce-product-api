@@ -1,31 +1,25 @@
+import  unittest
 import requests
-#base url
-BASE ="http://127.0.0.1:5000/"
 
+def add_two_numbers(a,b):
+    return a+b
 
-# comment out the test case if its not necessary
+class api_test(unittest.TestCase):
+    URL = "http://127.0.0.1:5000/"
+    def test1_add_product(self):
+        response = requests.post(self.URL+"product", json={"name":"Product6","description":"DESCRIPTION6", "price":30, "quantity":40})
+        self.assertEqual(response.status_code, 200)
 
-#Create
-# response = requests.post(BASE+"product", json={"name":"Product6","description":"DESCRIPTION6", "price":30, "quantity":40})
-# print(response.json())
-# print()
+    def test2_get_all_products(self):
+        response = requests.get(self.URL+'all_products')
+        self.assertEqual(response.status_code, 200)
 
-
-#Read all
-response = requests.get(BASE+"product")
-print(response.json())
-# print()
-
-# Read one
-# response = requests.get(BASE+"product/5")
-# print(response.json())
-
-
-# #Update
-# response = requests.put(BASE+"product/5",json={"name":"Product6","description":"DESCRIPTION6", "price":800, "quantity":20})
-# print(response.json())
-
-
-# #Delete
-# response = requests.delete(BASE+'product/5')
-# print(response.json())
+    def test3_get_product_with_id(self):
+        response = requests.get(self.URL+"product/1")
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.json(),{"id":1,"name":"Product6","description":"DESCRIPTION6", "price":30, "quantity":40})
+    
+    def test4_update_product(self):
+        response = requests.put(self.URL+"product/2", json={"name":"Product6","description":"DESCRIPTION6", "price":90, "quantity":20})
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.json(), {"id":2,"name":"Product6","description":"DESCRIPTION6", "price":90, "quantity":20})
